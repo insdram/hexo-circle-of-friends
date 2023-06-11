@@ -117,17 +117,16 @@ jobs:
         rebase: 'true'
         name: github-actions[bot]
         email: github-actions@noreply.github.com
-    
-    - name: Deploy
-      uses: saltbo/uptoc@master
+        
+    - name: Setup aliyun oss
+      uses: manyuanrong/setup-ossutil@master
       with:
-        driver: oss
-        region: cn-hangzhou
-        bucket: nuoea
-        file: data.json
-      env:
-        UPTOC_UPLOADER_AK: ${{ secrets.ACCESS_KEY_ID }}
-        UPTOC_UPLOADER_SK: ${{ secrets.ACCESS_KEY_SECRET }}
+          endpoint: oss-cn-hangzhou.aliyuncs.com
+          access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.ACCESS_KEY_SECRET }}
+
+    - name: To aliyun
+      run: ossutil cp -rf data.json oss://nuoea/
 
     - name: keep alive
       uses: gautamkrishnar/keepalive-workflow@master # keep workflows from being suspended when no commit for a long time
